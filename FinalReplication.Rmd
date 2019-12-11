@@ -30,6 +30,13 @@ plot(pressure)
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 ```{r}
-
+library(lme4)
+library(car)
+library(optimx)
 ```
+
+```{r}
+df <- read.table("hog.txt", header = TRUE)
+```
+
 

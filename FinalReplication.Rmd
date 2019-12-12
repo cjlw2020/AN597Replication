@@ -9,6 +9,7 @@ Packages Needed
 library(lme4)
 library(car)
 library(optimx)
+library(deSolve)
 ```
 
 Needed
@@ -42,8 +43,13 @@ Guessing Starting parameters
 Find Rate of Growth
 ```{r}
 RoG <- (log(max(y)/min(y)))/(max(x)) 
-RoG #Rate of Growth
+RoG #Rate of Growth, didnt work
 ```
+Nonparametric growthrate estimation
+```{r}
+
+```
+
 
 ```{r}
 a_start<- 0.2 #param a is the y value when "x=0"
@@ -57,6 +63,15 @@ cor(y,predict(k))
 ```{r}
 plot(x,y)
 lines(x,predict(k),col="red",lty=2,lwd=3) #This is not working properly
+```
+
+```{r}
+log_growth <- function(Time, State, Pars) {
+  with(as.list(c(State, Pars)), {
+    dN <- R*N*(1-N/K)
+    return(list(c(dN)))
+  })
+}
 ```
 
 

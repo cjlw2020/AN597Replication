@@ -63,9 +63,10 @@ model.gompertz <- nls(mass ~ g(age,theta1,theta2,theta3), data=df, start=list(th
 summary(model.gompertz)
 ```
 
-Lord Model: Attempts
+Non-linear least squares attempt:
 ```{r}
-m <- nls(df$mass~a*df$age/(b+df$age))
+m <- nls(mass~a*age/(b+age))
+
 ```
 
 

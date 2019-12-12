@@ -4,18 +4,30 @@ author: "cjlw2020"
 date: "12/11/2019"
 output: html_document
 ---
-
+Packages Needed
 ```{r}
 library(lme4)
 library(car)
 library(optimx)
 ```
 
+Needed
 ```{r}
  setwd("C:/Users/clint/Desktop/AN597_Project/Individule/doi_10.5061_dryad.0r31r__v1")
 df <- read.table("hog.txt", header = TRUE)
 head(df)
 ```
+
+```{r}
+summary(df)
+```
+```{r}
+plot(df)
+```
+```{r}
+
+```
+
 
 
 

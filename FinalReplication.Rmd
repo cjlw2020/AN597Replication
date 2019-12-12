@@ -24,6 +24,21 @@ summary(df)
 ```{r}
 plot(df)
 ```
+Non-linear least squares attempt:
+
+```{r}
+y <- c(df$mass)
+x <- c(df$age)
+plot(x,y)
+m<-nls(y~a*x/(b+x))
+cor(y,predict(m)) #Shows how well the model fits
+```
+
+```{r}
+plot(x,y)
+lines(x,predict(m),lty=2,col="red",lwd=3)
+```
+
 ```{r}
 t1 <- max(df$mass) #This will give us the maximum value from the data, which we're saying is our starting  value for "theta1", the parameter for the asymptote of growth
 
@@ -62,12 +77,5 @@ model.gompertz <- nls(mass ~ g(age,theta1,theta2,theta3), data=df, start=list(th
 
 summary(model.gompertz)
 ```
-
-Non-linear least squares attempt:
-```{r}
-m <- nls(mass~a*age/(b+age))
-
-```
-
 
 

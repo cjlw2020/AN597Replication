@@ -56,13 +56,17 @@ g <- function(age,theta1,theta2,theta3){theta1*exp(-exp(-(theta3*(age-theta2))))
 
 model.gompertz <- nls(mass ~ theta1*exp(-exp(-(theta3*(age-theta2)))), data=df, start=list(theta1=t1,theta2=t2,theta3=t3))
 ```
-
+or...
 ```{r}
 model.gompertz <- nls(mass ~ g(age,theta1,theta2,theta3), data=df, start=list(theta1=t1,theta2=t2,theta3=t3))
 
 summary(model.gompertz)
 ```
 
+Lord Model: Attempt
+```{r}
+
+```
 
 
 

@@ -63,13 +63,10 @@ model.gompertz <- nls(mass ~ g(age,theta1,theta2,theta3), data=df, start=list(th
 summary(model.gompertz)
 ```
 
-Lord Model: Attempt
+Lord Model: Attempts
 ```{r}
-
+m <- nls(df$mass~a*df$age/(b+df$age))
 ```
-
-
-
 
 
 

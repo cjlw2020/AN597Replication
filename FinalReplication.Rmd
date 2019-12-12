@@ -28,7 +28,8 @@ Non-linear least squares attempt:
 
 ```{r}
 y <- c(df$mass)
-x <- c(df$age)
+x1 <- c(df$age)
+x <- x/365 #Changes age from days to years
 plot(x,y)
 m<-nls(y~a*x/(b+x))
 cor(y,predict(m)) #Shows how well the model fits

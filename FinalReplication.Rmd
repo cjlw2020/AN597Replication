@@ -25,8 +25,46 @@ summary(df)
 plot(df)
 ```
 ```{r}
+t1 <- max(df$mass) #This will give us the maximum value from the data, which we're saying is our starting  value for "theta1", the parameter for the asymptote of growth
+
+new <- lm(logit(mass/t1)~age,data=df) #this gives us the logistic values for BW divided by the asymptote (an approximation of the curve values for each individual)
+
+t2 <- new$coef[1] #this is our starting value for "theta2", which is our parameter of the midpoint of the growth curve
+
+t3 <- new$coef[2] #this is our starting value for "theta3", which is our parameter of the rate of growth
 
 ```
+
+Logistic Model
+```{r}
+l <- function(AGE,theta1,theta2,theta3) {theta1/(1+exp(-(theta2+theta3*AGE)))} #here we're writing out the function for logistic growth (this is how we tell R what function we're using to model growth... like the function in the table in your paper), which estimates parameters "theta1", "theta2", and "theta3" for changes in a variable (like "BW") based on "AGE".
+
+model.logistic <- nls(mass ~ theta1/(1+exp(-(theta2+theta3*age))), data=df, start=list(theta1=t1,theta2=t2,theta3=t3))
+```
+or...
+```{r}
+model.logistic <- nls(mass ~ l(age,theta1,theta2,theta3), data=df, start=list(theta1=t1,theta2=t2,theta3=t3))
+
+summary(model.logistic) #this should give you the estimates for "theta1", "theta2", and "theta3" based on the data.
+
+#For Gompertz, everything the same, but the equation/function used (again, for Lord you'd get this from translating the model equations in your table to R code):
+```
+
+Gompertz Modle
+```{r}
+g <- function(age,theta1,theta2,theta3){theta1*exp(-exp(-(theta3*(age-theta2))))}
+
+model.gompertz <- nls(mass ~ theta1*exp(-exp(-(theta3*(age-theta2)))), data=df, start=list(theta1=t1,theta2=t2,theta3=t3))
+```
+
+```{r}
+model.gompertz <- nls(mass ~ g(age,theta1,theta2,theta3), data=df, start=list(theta1=t1,theta2=t2,theta3=t3))
+
+summary(model.gompertz)
+```
+
+
+
 
 
 

@@ -29,8 +29,7 @@ Non-linear least squares attempt:
 ```{r}
 y <- c(df$mass)
 x1 <- c(df$age)
-x <- x/365 #Changes age from days to years
-plot(x,y)
+x <- age1/365 #Changes age from days to years
 m<-nls(y~a*x/(b+x))
 cor(y,predict(m)) #Shows how well the model fits
 ```
@@ -39,6 +38,31 @@ cor(y,predict(m)) #Shows how well the model fits
 plot(x,y)
 lines(x,predict(m),lty=2,col="red",lwd=3)
 ```
+Guessing Starting parameters
+Find Rate of Growth
+```{r}
+RoG <- (log(max(y)/min(y)))/(max(x)) 
+RoG #Rate of Growth
+```
+
+```{r}
+a_start<- 0.2 #param a is the y value when "x=0"
+b_start<- 0.06523683 #b is the growth rate
+```
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
 
 ```{r}
 t1 <- max(df$mass) #This will give us the maximum value from the data, which we're saying is our starting  value for "theta1", the parameter for the asymptote of growth

@@ -28,21 +28,21 @@ plot(df)
 
 Non-linear least squares attempt:
 ```{r}
-y <- c(df$mass)
-x1 <- c(df$age)
-x <- age1/365 #Changes age from days to years
-m <-nls(y~a*x/(b+x))
-cor(y,predict(m)) #Shows how well the model fits
+mass <- c(df$mass)
+age1 <- c(df$age)
+age <- age1/365 #Changes age from days to years
+m <-nls(mass~a*age/(b+age))
+cor(mass,predict(m)) #Shows how well the model fits
 ```
 
 ```{r}
-plot(x,y)
-lines(x,predict(m),lty=2,col="red",lwd=3)
+plot(age,mass)
+lines(age,predict(m),lty=2,col="red",lwd=3)
 ```
 Guessing Starting parameters
 Find Rate of Growth
 ```{r}
-RoG <- (log(max(y)/min(y)))/(max(x)) 
+RoG <- (log(max(mass)/min(mass)))/(max(age)) 
 RoG #Rate of Growth, didnt work
 ```
 
@@ -52,14 +52,15 @@ b_start<- 0.06523683 #b is the growth rate
 ```
 
 ```{r}
-k <-nls(y~a*exp(-b*x),start=list(a=a_start,b=b_start))
-cor(y,predict(k)) 
+k <-nls(mass~a*exp(-b*age),start=list(a=a_start,b=b_start))
+cor(mass,predict(k)) 
 ```
 ```{r}
-plot(x,y)
-lines(x,predict(k),col="red",lty=2,lwd=3) #This is not working properly
+plot(age,mass)
+lines(age,predict(k),col="red",lty=2,lwd=3) #This is not working properly
 ```
 
+#This was the start for something that i didnt finish yet....
 ```{r}
 log_growth <- function(Time, State, Pars) {
   with(as.list(c(State, Pars)), {
@@ -73,16 +74,16 @@ log_growth <- function(Time, State, Pars) {
 
 
 
+Working on the Models
 
 
 
 
-
-
+Starting Variables
 ```{r}
-t1 <- max(y) #This will give us the maximum value from the data, which we're saying is our starting  value for "theta1", the parameter for the asymptote of growth
+t1 <- max(mass) #This will give us the maximum value from the data, which we're saying is our starting  value for "theta1", the parameter for the asymptote of growth
 
-new <- lm(logit(y/t1)~x,data=df) #this gives us the logistic values for BW divided by the asymptote (an approximation of the curve values for each individual)
+new <- lm(logit(mass/t1)~age,data=df) #this gives us the logistic values for BW divided by the asymptote (an approximation of the curve values for each individual)
 
 t2 <- new$coef[1] #this is our starting value for "theta2", which is our parameter of the midpoint of the growth curve
 
@@ -92,25 +93,23 @@ t3 <- new$coef[2] #this is our starting value for "theta3", which is our paramet
 
 Logistic Model
 ```{r}
-l <- function(AGE,theta1,theta2,theta3) {theta1/(1+exp(-(theta2+theta3*AGE)))} #here we're writing out the function for logistic growth (this is how we tell R what function we're using to model growth... like the function in the table in your paper), which estimates parameters "theta1", "theta2", and "theta3" for changes in a variable (like "BW") based on "AGE".
+l <- function(age,theta1,theta2,theta3) {theta1/(1+exp(-(theta2+theta3*age)))} #here we're writing out the function for logistic growth (this is how we tell R what function we're using to model growth... like the function in the table in your paper), which estimates parameters "theta1", "theta2", and "theta3" for changes in a variable (like "BW") based on "AGE".
 
-model.logistic <- nls(y ~ theta1/(1+exp(-(theta2+theta3*x))), data=df, start=list(theta1=t1,theta2=t2,theta3=t3))
-model.logistic
+model.logistic <- nls(mass ~ theta1/(1+exp(-(theta2+theta3*age))), data=df, start=list(theta1=t1,theta2=t2,theta3=t3))
 ```
 or...
 ```{r}
 model.logistic <- nls(mass ~ l(age,theta1,theta2,theta3), data=df, start=list(theta1=t1,theta2=t2,theta3=t3))
 
 summary(model.logistic) #this should give you the estimates for "theta1", "theta2", and "theta3" based on the data.
-
-#For Gompertz, everything the same, but the equation/function used (again, for Lord you'd get this from translating the model equations in your table to R code):
 ```
+
 ```{r}
-plot(x,y)
-lines(model.logistic)
+plot(age,mass)
+lines(model.logistic) #Currently doesn't work
 ```
 
-Gompertz Modle
+Gompertz Modle: For Gompertz, everything the same, but the equation/function used (again, for Lord you'd get this from translating the model equations in your table to R code):
 ```{r}
 g <- function(age,theta1,theta2,theta3){theta1*exp(-exp(-(theta3*(age-theta2))))}
 
@@ -121,6 +120,12 @@ or...
 model.gompertz <- nls(mass ~ g(age,theta1,theta2,theta3), data=df, start=list(theta1=t1,theta2=t2,theta3=t3))
 
 summary(model.gompertz)
+```
+
+Lord Model:
+```{r}
+#Lord Model 
+L <- function(age, theta1, theta2, theta3){t1(exp(-(t3)/age + natal mass))}
 ```
 
 

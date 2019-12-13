@@ -106,7 +106,7 @@ summary(model.logistic) #this should give you the estimates for "theta1", "theta
 
 ```{r}
 plot(age,mass)
-lines(model.logistic) #Currently doesn't work
+lines(age, predict(model.logistic),col="red",lty=2,lwd=3)
 ```
 
 Gompertz Modle: For Gompertz, everything the same, but the equation/function used (again, for Lord you'd get this from translating the model equations in your table to R code):
@@ -122,10 +122,18 @@ model.gompertz <- nls(mass ~ g(age,theta1,theta2,theta3), data=df, start=list(th
 summary(model.gompertz)
 ```
 
+```{r}
+plot(age,mass)
+lines(age, predict(model.gompertz),col="red",lty=2,lwd=3)
+```
+
+
 Lord Model:
 ```{r}
 #Lord Model 
-L <- function(age, theta1, theta2, theta3){t1(exp(-(t3)/age + natal mass))}
+#L <- function(age, theta1, theta2, theta3){t1(exp(-(t3)/age + natal mass))}
+
+model.lord <- nls{t1(exp(-(t3)/age + natal mass))}
 ```
 
 

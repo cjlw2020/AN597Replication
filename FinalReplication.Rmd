@@ -133,7 +133,11 @@ Lord Model:
 #Lord Model 
 #L <- function(age, theta1, theta2, theta3){t1(exp(-(t3)/age + natal mass))}
 
-model.lord <- nls{t1(exp(-(t3)/age + natal mass))}
+model.lord <- nls(t1(exp(-(t3)/age + 0.62)))
+```
+
+```{r}
+model.lord <- (nls(t1(exp(-(t3)/age + 0.62))))
 ```
 
 

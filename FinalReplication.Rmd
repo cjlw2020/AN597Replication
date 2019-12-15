@@ -11,6 +11,7 @@ library(car)
 library(optimx)
 library(deSolve)
 library(ggplot2)
+library(data.table)
 ```
 ```{r}
  setwd("C:/Users/clint/Desktop/AN597_Project/Individule/doi_10.5061_dryad.0r31r__v1")
@@ -153,6 +154,11 @@ n <- c(23,20,12,10,19,9,5,3,3,2,5,11)
 T1.df <- data.frame(Age_class_years,n)
 T1.df
 ```
+```{r}
+setDT(T1.df)
+```
+
+#Table
 
 
 

@@ -125,20 +125,25 @@ p <- p + xlab("Age (years)") + ylab("Lens mass (g)")
 p
 ```
 
-#Lord Model: I dont know why they don't work
+#Lord Model: Something isn't right because every figure looks the same
 ```{r}
 #Lord Model 
-L <- function(age,theta1,theta2,theta3){theta1*(exp(-theta3/age + 0.62))}
-  
-model.lord <- nls(theta1*(exp(-theta3/age + 0.62)), data=df, start=list(theta1=t1,theta2=t2,theta3=t3))
+L <- function(age,theta1,theta3){theta1*exp(-theta3/age + 0.62)}
+
+lord.model <- nls(mass ~ L(age,theta1,theta3), data=df, start=list(theta1=t1,theta3=t3))
+
+summary(lord.model)
 ```
-or...
-```{r}
-L <- function(age,theta1,theta2,theta3){theta1*(exp(-(theta3)/age + 0.62))}
+```{r, fig.width= 4,fig.height=4}
+p <- ggplot(data = df, aes(age,mass)) +
+  geom_smooth(model = lord.model, color = "red", size = 0.5, linetype = 2, alpha = 0.15)  +
+  geom_point(aes(age,mass), size = 1, shape = 21, stroke = 1) +
+  theme_test() +
+  scale_y_continuous(lim = c(0.20, 0.56), breaks = c(0.24,0.28, 0.32, 0.36, 0.40, 0.44, 0.48, 0.52, 0.56))
+  #scale_x_continuous(lim = c(0, 15), breaks = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15))
 
-model.lord <- nls(mass ~ L(age,theta1,theta2,theta3),data=df, start=list(theta1=t1,theta2=t2,theta3=t3))
-
-summary(model.lord)
+p <- p + xlab("Age (years)") + ylab("Lens mass (g)") 
+p
 ```
 
 #Tables

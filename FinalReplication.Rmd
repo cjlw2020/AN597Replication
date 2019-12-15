@@ -4,7 +4,7 @@ author: "cjlw2020"
 date: "12/11/2019"
 output: html_document
 ---
-Packages Needed
+#Packages Needed
 ```{r}
 library(lme4)
 library(car)
@@ -26,8 +26,7 @@ summary(df)
 ```{r}
 plot(df)
 ```
-
-Non-linear least squares attempt:
+#Non-linear least squares attempt:
 ```{r}
 mass <- c(df$mass)
 age1 <- c(df$age)
@@ -40,18 +39,15 @@ cor(mass,predict(m)) #Shows how well the model fits
 plot(age,mass)
 lines(age,predict(m),lty=2,col="red",lwd=3)
 ```
-Guessing Starting parameters
-Find Rate of Growth
+#Find Rate of Growth
 ```{r}
 RoG <- (log(max(mass)/min(mass)))/(max(age)) 
 RoG #Rate of Growth, didnt work
 ```
-
 ```{r}
 a_start<- 0.2 #param a is the y value when "x=0"
 b_start<- 0.06523683 #b is the growth rate
 ```
-
 ```{r}
 k <-nls(mass~a*exp(-b*age),start=list(a=a_start,b=b_start))
 cor(mass,predict(k)) 
@@ -61,24 +57,7 @@ plot(age,mass)
 lines(age,predict(k),col="red",lty=2,lwd=3) #This is not working properly
 ```
 
-#This was the start for something that i didnt finish yet....
-```{r}
-log_growth <- function(Time, State, Pars) {
-  with(as.list(c(State, Pars)), {
-    dN <- R*N*(1-N/K)
-    return(list(c(dN)))
-  })
-}
-```
-
-
-
-
-
-Working on the Models
-
-
-
+#Models
 
 Starting Variables
 ```{r}
@@ -92,7 +71,7 @@ t3 <- new$coef[2] #this is our starting value for "theta3", which is our paramet
 
 ```
 
-Logistic Model
+#Logistic Model:
 ```{r}
 l <- function(age,theta1,theta2,theta3) {theta1/(1+exp(-(theta2+theta3*age)))} #here we're writing out the function for logistic growth (this is how we tell R what function we're using to model growth... like the function in the table in your paper), which estimates parameters "theta1", "theta2", and "theta3" for changes in a variable (like "BW") based on "AGE".
 
@@ -104,13 +83,10 @@ model.logistic <- nls(mass ~ l(age,theta1,theta2,theta3), data=df, start=list(th
 
 summary(model.logistic) #this should give you the estimates for "theta1", "theta2", and "theta3" based on the data.
 ```
-
 ```{r}
 plot(age,mass)
 lines(age, predict(model.logistic),col="red",lty=2,lwd=3)
 ```
-
-
 ```{r}
 ggplot(data = df, aes(age,mass)) +
   geom_smooth(model = model.logistic, color = "red", size = 0.5, linetype = 2, alpha = 0.15)  +
@@ -118,14 +94,8 @@ ggplot(data = df, aes(age,mass)) +
   theme_test()
 ```
 
-
-
-
-
-
-
-
-Gompertz Modle: For Gompertz, everything the same, but the equation/function used (again, for Lord you'd get this from translating the model equations in your table to R code):
+#Gompertz Modle: 
+For Gompertz, everything the same, but the equation/function used (again, for Lord you'd get this from translating the model equations in your table to R code):
 ```{r}
 g <- function(age,theta1,theta2,theta3){theta1*exp(-exp(-(theta3*(age-theta2))))}
 
@@ -137,7 +107,6 @@ model.gompertz <- nls(mass ~ g(age,theta1,theta2,theta3), data=df, start=list(th
 
 summary(model.gompertz)
 ```
-
 ```{r}
 plot(age,mass)
 lines(age, predict(model.gompertz),col="red",lty=2,lwd=3)

@@ -10,6 +10,7 @@ library(lme4)
 library(car)
 library(optimx)
 library(deSolve)
+library(ggplot2)
 ```
 
 Needed
@@ -109,6 +110,26 @@ plot(age,mass)
 lines(age, predict(model.logistic),col="red",lty=2,lwd=3)
 ```
 
+```{r}
+ggplot
+```
+
+
+```{r}
+ggplot(data = df, aes(age,mass)) +
+  geom_smooth(model = model.logistic, color = "red", size = 0.5)  +
+  geom_point(aes(age,mass)) +
+  theme_test()
+  
+```
+
+
+
+
+
+
+
+
 Gompertz Modle: For Gompertz, everything the same, but the equation/function used (again, for Lord you'd get this from translating the model equations in your table to R code):
 ```{r}
 g <- function(age,theta1,theta2,theta3){theta1*exp(-exp(-(theta3*(age-theta2))))}
@@ -127,17 +148,15 @@ plot(age,mass)
 lines(age, predict(model.gompertz),col="red",lty=2,lwd=3)
 ```
 
-
 Lord Model:
 ```{r}
 #Lord Model 
-#L <- function(age, theta1, theta2, theta3){t1(exp(-(t3)/age + natal mass))}
+L <- function(age, theta1, theta2, theta3){t1(exp(-(t3)/age + 0.62))}
 
-model.lord <- nls(t1(exp(-(t3)/age + 0.62)))
+model.lord <- nls(theta1(exp(-(theta3)/age + 0.62)))
 ```
 
 ```{r}
 model.lord <- (nls(t1(exp(-(t3)/age + 0.62))))
 ```
-
 

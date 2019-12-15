@@ -93,7 +93,7 @@ t <- t + xlab("Age (years)") + ylab("Lens mass (g)")
 t
 ```
 
-```{r, fig.width= 4,fig.height=4}
+
 #Gompertz Modle: 
 For Gompertz, everything the same, but the equation/function used (again, for Lord you'd get this from translating the model equations in your table to R code):
 ```{r}
@@ -112,7 +112,7 @@ plot(age,mass)
 lines(age, predict(model.gompertz),col="red",lty=2,lwd=3)
 ```
 
-```{r}
+```{r, fig.width= 4,fig.height=4}
 p <- ggplot(data = df, aes(age,mass)) +
   geom_smooth(model = model.gompertz, color = "red", size = 0.5, linetype = 2, alpha = 0.15)  +
   geom_point(aes(age,mass), size = 1, shape = 21, stroke = 1) +
@@ -124,18 +124,35 @@ p <- p + xlab("Age (years)") + ylab("Lens mass (g)")
 p
 ```
 
-#Lord Model:
+#Lord Model: I dont know why they don't work
 ```{r}
 #Lord Model 
 L <- function(age,theta1,theta2,theta3){theta1*(exp(-theta3/age + 0.62))}
   
-model.lord <- nls(theta1*(exp(-theta3/age + 0.62)))
+model.lord <- nls(theta1*(exp(-theta3/age + 0.62)), data=df, start=list(theta1=t1,theta2=t2,theta3=t3))
 ```
 or...
 ```{r}
-model.lord <- nls(theta1*(exp(-theta3/age + 0.62))), data=df, start=list(theta1=t1,theta2=t2,theta3=t3))
+L <- function(age,theta1,theta2,theta3){theta1*(exp(-(theta3)/age + 0.62))}
+
+model.lord <- nls(mass ~ L(age,theta1,theta2,theta3),data=df, start=list(theta1=t1,theta2=t2,theta3=t3))
 
 summary(model.lord)
 ```
 
 #Tables
+
+#Table 1.
+```{r}
+age
+```
+
+```{r}
+Age_class_years <- c(0:10,"Total")
+n <- c(23,20,12,10,19,9,5,3,3,2,5,11)
+T1.df <- data.frame(Age_class_years,n)
+T1.df
+```
+
+
+

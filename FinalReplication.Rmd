@@ -84,7 +84,7 @@ lines(age, predict(model.logistic),col="red",lty=2,lwd=3)
 ```
 ```{r, fig.width= 4,fig.height=4}
 t <- ggplot(data = df, aes(age,mass)) +
-  geom_smooth(model = model.logistic, color = "red", size = 0.5, linetype = 2, alpha = 0.15)  +
+  geom_smooth(model = model.logistic, se = TRUE, color = "red", size = 0.5, linetype = 2, alpha = 0.15)  +
   geom_point(aes(age,mass), size = 1, shape = 21, stroke = 1) +
   theme_test() +
   scale_y_continuous(lim = c(0.20, 0.56), breaks = c(0.24,0.28, 0.32, 0.36, 0.40, 0.44, 0.48, 0.52, 0.56))
@@ -93,6 +93,14 @@ t <- ggplot(data = df, aes(age,mass)) +
 t <- t + xlab("Age (years)") + ylab("Lens mass (g)") 
 t
 ```
+#Trying to place model properly into graph, not working
+```{r}
+ggplot(df, aes(age, mass))+
+  geom_point() +
+# Add the line using the fortified fit data, plotting the x vs. the fitted values
+  geom_line(data = fortify(df), aes(x = age, y = mass))
+```
+
 
 
 #Gompertz Modle: 

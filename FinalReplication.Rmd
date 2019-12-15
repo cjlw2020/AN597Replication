@@ -110,17 +110,12 @@ plot(age,mass)
 lines(age, predict(model.logistic),col="red",lty=2,lwd=3)
 ```
 
-```{r}
-ggplot
-```
-
 
 ```{r}
 ggplot(data = df, aes(age,mass)) +
-  geom_smooth(model = model.logistic, color = "red", size = 0.5)  +
-  geom_point(aes(age,mass)) +
+  geom_smooth(model = model.logistic, color = "red", size = 0.5, linetype = 2, alpha = 0.15)  +
+  geom_point(aes(age,mass), size = 1, shape = 21, stroke = 1) +
   theme_test()
-  
 ```
 
 
@@ -146,6 +141,13 @@ summary(model.gompertz)
 ```{r}
 plot(age,mass)
 lines(age, predict(model.gompertz),col="red",lty=2,lwd=3)
+```
+
+```{r}
+ggplot(data = df, aes(age,mass)) +
+  geom_smooth(model = model.gompertz, color = "red", size = 0.5, linetype = 2, alpha = 0.15)  +
+  geom_point(aes(age,mass), size = 1, shape = 21, stroke = 1) +
+  theme_test()
 ```
 
 Lord Model:

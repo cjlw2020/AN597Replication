@@ -59,14 +59,10 @@ lines(age,predict(k),col="red",lty=2,lwd=3) #This is not working properly
 
 Starting Variables
 ```{r}
-t1 <- max(mass) #This will give us the maximum value from the data, which we're saying is our starting  value for "theta1", the parameter for the asymptote of growth
-
-new <- lm(logit(mass/t1)~age,data=df) #this gives us the logistic values for BW divided by the asymptote (an approximation of the curve values for each individual)
-
-t2 <- new$coef[1] #this is our starting value for "theta2", which is our parameter of the midpoint of the growth curve
-
-t3 <- new$coef[2] #this is our starting value for "theta3", which is our parameter of the rate of growth
-
+t1 <- max(mass) #maximum value from the data, our starting  value for "theta1", parameter for the asymptote of growth
+new <- lm(logit(mass/t1)~age,data=df) #logistic values for mass divided by the asymptote (an approximation of the curve values for each individual)
+t2 <- new$coef[1] #starting value for "theta2", parameter of the midpoint of the growth curve
+t3 <- new$coef[2] #starting value for "theta3", parameter of the rate of growth
 ```
 
 #Logistic Model:
@@ -85,13 +81,19 @@ summary(model.logistic) #this should give you the estimates for "theta1", "theta
 plot(age,mass)
 lines(age, predict(model.logistic),col="red",lty=2,lwd=3)
 ```
-```{r}
-ggplot(data = df, aes(age,mass)) +
+```{r, fig.width= 4,fig.height=4}
+t <- ggplot(data = df, aes(age,mass)) +
   geom_smooth(model = model.logistic, color = "red", size = 0.5, linetype = 2, alpha = 0.15)  +
   geom_point(aes(age,mass), size = 1, shape = 21, stroke = 1) +
-  theme_test()
+  theme_test() +
+  scale_y_continuous(lim = c(0.20, 0.56), breaks = c(0.24,0.28, 0.32, 0.36, 0.40, 0.44, 0.48, 0.52, 0.56))
+  #scale_x_continuous(lim = c(0, 15), breaks = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15))
+
+t <- t + xlab("Age (years)") + ylab("Lens mass (g)") 
+t
 ```
 
+```{r, fig.width= 4,fig.height=4}
 #Gompertz Modle: 
 For Gompertz, everything the same, but the equation/function used (again, for Lord you'd get this from translating the model equations in your table to R code):
 ```{r}
@@ -111,21 +113,29 @@ lines(age, predict(model.gompertz),col="red",lty=2,lwd=3)
 ```
 
 ```{r}
-ggplot(data = df, aes(age,mass)) +
+p <- ggplot(data = df, aes(age,mass)) +
   geom_smooth(model = model.gompertz, color = "red", size = 0.5, linetype = 2, alpha = 0.15)  +
   geom_point(aes(age,mass), size = 1, shape = 21, stroke = 1) +
-  theme_test()
+  theme_test() +
+  scale_y_continuous(lim = c(0.20, 0.56), breaks = c(0.24,0.28, 0.32, 0.36, 0.40, 0.44, 0.48, 0.52, 0.56))
+  #scale_x_continuous(lim = c(0, 15), breaks = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15))
+
+p <- p + xlab("Age (years)") + ylab("Lens mass (g)") 
+p
 ```
 
-Lord Model:
+#Lord Model:
 ```{r}
 #Lord Model 
-L <- function(age, theta1, theta2, theta3){t1(exp(-(t3)/age + 0.62))}
-
-model.lord <- nls(theta1(exp(-(theta3)/age + 0.62)))
+L <- function(age,theta1,theta2,theta3){theta1*(exp(-theta3/age + 0.62))}
+  
+model.lord <- nls(theta1*(exp(-theta3/age + 0.62)))
 ```
-
+or...
 ```{r}
-model.lord <- (nls(t1(exp(-(t3)/age + 0.62))))
+model.lord <- nls(theta1*(exp(-theta3/age + 0.62))), data=df, start=list(theta1=t1,theta2=t2,theta3=t3))
+
+summary(model.lord)
 ```
 
+#Tables

@@ -100,6 +100,12 @@ ggplot(df, aes(age, mass))+
 # Add the line using the fortified fit data, plotting the x vs. the fitted values
   geom_line(data = fortify(df), aes(x = age, y = mass))
 ```
+```{r, fig.width= 4,fig.height=4}
+plot(age,mass)
+
+lines(x,predict(model.logistic),col="red")
+```
+
 
 
 
@@ -120,7 +126,11 @@ summary(model.gompertz)
 plot(age,mass)
 lines(age, predict(model.gompertz),col="red",lty=2,lwd=3)
 ```
+```{r, fig.width= 4,fig.height=4}
+plot(age,mass)
 
+lines(x,predict(model.gompertz),col="red")
+```
 ```{r, fig.width= 4,fig.height=4}
 p <- ggplot(data = df, aes(age,mass)) +
   geom_smooth(model = model.gompertz, color = "red", size = 0.5, linetype = 2, alpha = 0.15)  +
@@ -136,11 +146,16 @@ p
 #Lord Model: Something isn't right because every figure looks the same
 ```{r}
 #Lord Model 
-L <- function(age,theta1,theta3){theta1*exp(-theta3/age + 0.62)}
+L <- function(age,theta1,theta3,alpha){theta1*exp(-theta3/age + 0.62)}
 
 lord.model <- nls(mass ~ L(age,theta1,theta3), data=df, start=list(theta1=t1,theta3=t3))
 
 summary(lord.model)
+```
+```{r, fig.width= 4,fig.height=4}
+plot(age,mass)
+
+lines(x,predict(lord.model),col="red")
 ```
 ```{r, fig.width= 4,fig.height=4}
 p <- ggplot(data = df, aes(age,mass)) +
